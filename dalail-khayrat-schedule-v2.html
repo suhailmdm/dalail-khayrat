@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dalail al-Khayrat Schedule v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300..700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{
+  --bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#fbfbf9;--offset:#f3f0ec;--border:#d4d1ca;--divider:#dcd9d5;
+  --text:#28251d;--muted:#7a7974;--faint:#bab9b4;--primary:#01696f;--primary-2:#cedcd8;--gold:#c4870a;--gold-2:#f5e9cc;
+  --danger:#964219;--success:#437a22;--radius:.9rem;--radius-sm:.55rem;--shadow:0 6px 24px oklch(0.2 0.01 80 / 0.08);
+}
+[data-theme="dark"]{
+  --bg:#171614;--surface:#1c1b19;--surface-2:#201f1d;--offset:#252320;--border:#393836;--divider:#262523;
+  --text:#cdccca;--muted:#979592;--faint:#5a5957;--primary:#4f98a3;--primary-2:#313b3b;--gold:#e8af34;--gold-2:#3a3020;
+  --danger:#bb653b;--success:#6daa45;--radius:.9rem;--radius-sm:.55rem;--shadow:0 10px 30px oklch(0 0 0 / .28);
+}
+*{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth} body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+button,input,select{font:inherit} .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh} @media(max-width:950px){.app{grid-template-columns:1fr}}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px;display:flex;flex-direction:column;gap:18px} @media(max-width:950px){.sidebar{border-right:none;border-bottom:1px solid var(--border)}}
+.brand{display:flex;gap:12px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--border)} .logo{width:42px;height:42px}
+.brand h1{font-size:1rem;line-height:1.2} .arabic{font-family:'Amiri',serif;color:var(--muted);font-size:1rem;direction:rtl}
+.nav-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:700;margin-bottom:8px}
+.nav button{display:flex;width:100%;gap:10px;align-items:center;padding:10px 12px;border:none;border-radius:12px;background:transparent;color:var(--muted);cursor:pointer;text-align:left}
+.nav button.active{background:var(--primary-2);color:var(--primary);font-weight:700} .nav button:hover{background:var(--offset);color:var(--text)} .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.7}
+.main{display:flex;flex-direction:column;min-width:0} .topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:1px solid var(--border);background:var(--surface);gap:12px;position:sticky;top:0;z-index:10}
+.topbar h2{font-size:1.25rem} .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--surface);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer} .btn.primary{background:var(--primary);color:white;border-color:transparent} .btn:hover{filter:brightness(1.04)}
+.wrap{padding:28px;display:grid;gap:22px} @media(max-width:700px){.wrap{padding:16px} .topbar{padding:14px 16px}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px} @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}} @media(max-width:520px){.stats{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)} .stat{padding:18px} .stat small{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.73rem;font-weight:700;margin-bottom:8px} .stat strong{font-size:1.9rem;letter-spacing:-.03em} .stat p{color:var(--muted);font-size:.88rem;margin-top:4px}
+.panel{padding:18px} .weekbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px} .weekbar .cluster{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:.76rem;font-weight:700} .badge.gold{background:var(--gold-2);color:var(--gold)} .badge.primary{background:var(--primary-2);color:var(--primary)}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px} @media(max-width:1050px){.grid{grid-template-columns:repeat(4,1fr)}} @media(max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+.day{padding:14px;border:1px solid var(--border);border-radius:16px;background:var(--surface-2);display:flex;flex-direction:column;gap:10px;min-height:180px} .day.today{border-color:var(--primary)} .day.wed{outline:1px solid color-mix(in oklab, var(--gold) 60%, transparent)}
+.dayhead{display:flex;justify-content:space-between;align-items:flex-start} .dayname{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700} .daynum{font-size:2rem;font-weight:800;letter-spacing:-.04em}
+.slot{padding:10px;border-radius:12px;background:var(--offset);display:grid;gap:4px} .slot.fixed{background:var(--primary-2)} .slot.floating{background:var(--gold-2)}
+.slot .hz{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em} .slot .reader{font-size:.9rem;font-weight:700} .slot .sub{font-size:.83rem;color:var(--muted)}
+.empty{margin-top:auto;color:var(--faint);font-size:.82rem}
+.section-title{font-size:1.05rem;font-weight:800;margin-bottom:12px}
+.tablewrap{overflow:auto} table{width:100%;border-collapse:collapse} th,td{padding:12px 14px;border-bottom:1px solid var(--divider);text-align:left;vertical-align:top} th{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)} td{font-size:.92rem}
+.tag{display:inline-flex;padding:4px 10px;border-radius:999px;font-size:.76rem;font-weight:700} .tag.fixed{background:var(--primary-2);color:var(--primary)} .tag.floating{background:var(--gold-2);color:var(--gold)}
+.hidden{display:none} .split{display:grid;grid-template-columns:1.15fr .85fr;gap:22px} @media(max-width:1000px){.split{grid-template-columns:1fr}}
+.note{color:var(--muted);font-size:.9rem;line-height:1.6} .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--offset);padding:2px 6px;border-radius:8px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:20} .modal-bg.show{display:flex}
+.modal{width:min(560px,100%);background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:20px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:620px){.formgrid{grid-template-columns:1fr}}
+.label{font-size:.84rem;color:var(--muted);font-weight:700;margin-bottom:6px;display:block} input,select{width:100%;padding:10px 12px;background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-radius:12px}
+.footer-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 48 48" fill="none" aria-label="Dalail logo">
+        <rect width="48" height="48" rx="14" fill="var(--primary-2)"/>
+        <circle cx="24" cy="24" r="14" stroke="var(--primary)" stroke-width="1.8"/>
+        <path d="M24 13v22M13 24h22" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="24" cy="24" r="3.3" fill="var(--primary)"/>
+      </svg>
+      <div>
+        <h1>Dalāʾil al-Khayrāt<br>Schedule v2</h1>
+        <div class="arabic">دلائل الخيرات</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <div class="nav-title">Navigation</div>
+      <button class="active" data-view-btn="schedule"><span class="dot"></span> Weekly schedule</button>
+      <button data-view-btn="readers"><span class="dot"></span> Readers</button>
+            <button data-view-btn="setup"><span class="dot"></span> Setup notes</button>
+    </div>
+
+    <div>
+      <div class="nav-title">Current logic</div>
+      <p class="note">This version assumes an <strong>8-hizb cycle</strong>, with Wednesday able to hold two hizbs when needed. The final fixed/floating roster can be swapped in later as a small data-only edit.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h2 id="pageTitle">Weekly schedule</h2>
+      <div class="toolbar">
+        <button class="btn" id="prevWeek">← Week</button>
+        <button class="btn" id="nextWeek">Week →</button>
+        <button class="btn primary" id="openAssign">+ Assign slot</button>
+        <button class="btn" id="themeToggle">Theme</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section id="view-schedule">
+        <div class="stats" id="stats"></div>
+        <div class="split">
+          <div class="card panel">
+            <div class="weekbar">
+              <div>
+                <div class="section-title" id="weekLabel">This week</div>
+                <div class="note">One clean rota view for the group. Wednesday can hold two readings.</div>
+              </div>
+              <div class="cluster">
+                <span class="badge gold">8 hizbs</span>
+                <span class="badge primary">History-informed</span>
+              </div>
+            </div>
+            <div class="grid" id="weekGrid"></div>
+          </div>
+
+          <div class="card panel">
+            <div class="section-title">Next rebuild inputs</div>
+            <p class="note">When you send the exact reader list, the only thing to change is the <span class="code">readers</span> array and optionally the default weekly template. The WhatsApp history has already been wired into this version as imported history rows.</p>
+            <br>
+            <p class="note">Suggested final format:</p>
+            <p class="note">- Fixed readers: Name — default hizb<br>- Floating readers: Name<br>- Optional: who can cover Wednesday double slots</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-readers" class="hidden">
+        <div class="card panel tablewrap">
+          <div class="section-title">Readers</div>
+          <table>
+            <thead><tr><th>Name</th><th>Type</th><th>Default hizb</th><th>Notes</th></tr></thead>
+            <tbody id="readersTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      
+
+      <section id="view-setup" class="hidden">
+        <div class="card panel">
+          <div class="section-title">What to edit later</div>
+          <p class="note">1. Update the <span class="code">readers</span> array with your exact fixed/floating list.</p>
+          <p class="note">2. Optionally update <span class="code">defaultTemplate</span> if your real weekly default is different.</p>
+          <p class="note">3. Commit the updated HTML to GitHub Pages and the live site will refresh after deployment. GitHub Pages publishes static file changes from the repository branch you configured. [web:2]</p>
+          <br>
+          <div class="section-title">Data model in this file</div>
+          <p class="note">- <span class="code">readers</span>: people and their fixed/floating type</p>
+          <p class="note">- <span class="code">defaultTemplate</span>: the suggested weekly rota</p>
+          <p class="note">- <span class="code">historyRecords</span>: imported past reading rows from WhatsApp</p>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="modal-bg" id="assignModalBg">
+  <div class="modal">
+    <div class="section-title">Assign slot</div>
+    <div class="formgrid">
+      <div><label class="label">Reader</label><select id="assignReader"></select></div>
+      <div><label class="label">Day</label><select id="assignDay"></select></div>
+      <div><label class="label">Hizb</label><select id="assignHizb"></select></div>
+      <div><label class="label">Role</label><select id="assignType"><option value="fixed">Fixed</option><option value="floating">Floating</option></select></div>
+    </div>
+    <div class="footer-actions">
+      <button class="btn" id="closeAssign">Cancel</button>
+      <button class="btn primary" id="saveAssign">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const readers = [
+  { id: 1, name: "Sidi Imtiaz", type: "Fixed", defaultDays: ["Thursday","Friday","Sunday"], notes: "Core reader / coordinator" },
+  { id: 2, name: "Sidi Suhail", type: "Fixed", defaultDays: ["Wednesday"], preferredSlot: 2, notes: "Moved this week from Tuesday to Wednesday slot 2" },
+  { id: 3, name: "Sidi Zafran", type: "Fixed", defaultDays: ["Wednesday"], preferredSlot: 1, notes: "Wednesday slot 1" },
+  { id: 4, name: "Sidi Dr. Mahmud", type: "Fixed", defaultDays: ["Saturday"], notes: "Fixed weekly reader" },
+  { id: 5, name: "Sidi Tariq", type: "Fixed", defaultDays: ["Monday"], notes: "Permanent Monday reader" }
+];
+
+const historyRecords = [{"date": "Monday, 5th January 2026", "session": 215, "khatam": 26, "covered": "Hizb 3 completed", "reader_raw": "Brother Imtiaz", "hizbs": [3]}, {"date": "Tuesday, 6th January 2026", "session": 216, "khatam": 26, "covered": "Hizb 4 completed", "reader_raw": "Brother Imtiaz", "hizbs": [4]}, {"date": "Wednesday, 7th January 2026", "session": 217, "khatam": 26, "covered": "Hizb 5 completed", "reader_raw": "Brother Imtiaz", "hizbs": [5]}, {"date": "Thursday, 8th January 2026", "session": 218, "khatam": 26, "covered": "Hizb 6 completed", "reader_raw": "Brother Imtiaz", "hizbs": [6]}, {"date": "Saturday, 10th January 2026", "session": 219, "khatam": 26, "covered": "Hizb 7 completed", "reader_raw": "Brother Imtiaz", "hizbs": [7]}, {"date": "Sunday, 11th January 2026", "session": 220, "khatam": 26, "covered": "Hizb 8 completed", "reader_raw": "Brother Imtiaz", "hizbs": [8]}, {"date": "Monday, 12th January 2026", "session": 221, "khatam": 27, "covered": "Hizb 1 completed", "reader_raw": "Brother Imtiaz", "hizbs": [1]}, {"date": "Tuesday, 13th January 2026", "session": 222, "khatam": 27, "covered": "Hizb 2 completed", "reader_raw": "Brother Imtiaz", "hizbs": [2]}, {"date": "Wednesday, 14th January 2026", "session": 223, "khatam": 27, "covered": "Hizb 3 completed", "reader_raw": "Brother Imtiaz", "hizbs": [3]}, {"date": "Thursday, 15th January 2026", "session": 224, "khatam": 27, "covered": "Hizb 4 completed", "reader_raw": "Brother Imtiaz", "hizbs": [4]}, {"date": "Friday, 16th January 2026", "session": 225, "khatam": 27, "covered": "Hizb 5 completed", "reader_raw": "Brother Imtiaz", "hizbs": [5]}, {"date": "Saturday, 17th January 2026", "session": 226, "khatam": 27, "covered": "Hizb 6 completed", "reader_raw": "Brother Imtiaz", "hizbs": [6]}, {"date": "Sunday, 18th January 2026", "session": 227, "khatam": 27, "covered": "Hizb 7 completed", "reader_raw": "Brother Imtiaz", "hizbs": [7]}, {"date": "Monday, 19th January 2026", "session": 228, "khatam": 27, "covered": "Hizb 8 completed", "reader_raw": "Brother Imtiaz", "hizbs": [8]}, {"date": "Tuesday, 20th January 2026", "session": 229, "khatam": 28, "covered": "Hizb 1&2 completed", "reader_raw": "Brother Imtiaz & Brother Farook", "hizbs": [1]}, {"date": "Wednesday, 21st January 2026", "session": 230, "khatam": 28, "covered": "Hizb 3 completed", "reader_raw": "Brother Zafran", "hizbs": [3]}];
+
+const defaultTemplate = {
+  0: [{hizb:8, readerId:1, type:'fixed'}],
+  1: [{hizb:1, readerId:1, type:'fixed'}],
+  2: [{hizb:2, readerId:3, type:'floating'}],
+  3: [{hizb:3, readerId:2, type:'fixed'}, {hizb:4, readerId:1, type:'fixed'}],
+  4: [{hizb:5, readerId:1, type:'fixed'}],
+  5: [{hizb:6, readerId:4, type:'floating'}],
+  6: [{hizb:7, readerId:5, type:'floating'}],
+};
+
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+let currentWeekOffset = 0;
+let customAssignments = {};
+
+function getReader(id) { return readers.find(r => r.id === id); }
+function weekStart(offset=0) { const d=new Date(); const day=d.getDay(); d.setHours(0,0,0,0); d.setDate(d.getDate()-day+(offset*7)); return d; }
+function formatRange(start) { const end=new Date(start); end.setDate(end.getDate()+6); return `${start.toLocaleDateString('en-GB',{day:'numeric',month:'short'})} – ${end.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}`; }
+function weekKey(offset) { return weekStart(offset).toISOString().slice(0,10); }
+function dayDate(index, offset) { const d=weekStart(offset); d.setDate(d.getDate()+index); return d; }
+function isToday(index, offset) { const a=dayDate(index,offset); const b=new Date(); b.setHours(0,0,0,0); return a.getTime()===b.getTime(); }
+
+function buildWeekAssignments(offset) {
+  const key = weekKey(offset);
+  const merged = JSON.parse(JSON.stringify(defaultTemplate));
+  if (customAssignments[key]) {
+    Object.entries(customAssignments[key]).forEach(([day, slots]) => { merged[day] = slots; });
+  }
+  return merged;
+}
+
+function renderStats() {
+  const week = buildWeekAssignments(currentWeekOffset);
+  const slots = Object.values(week).flat();
+  const uniq = new Set(slots.map(s=>s.hizb));
+  document.getElementById('stats').innerHTML = `
+    <div class="card stat"><small>Weekly slots</small><strong>${slots.length}</strong><p>Total assignments shown this week</p></div>
+    <div class="card stat"><small>Unique hizbs</small><strong>${uniq.size}</strong><p>Covered out of 8</p></div>
+    <div class="card stat"><small>Fixed readers</small><strong>${readers.filter(r=>r.type==='fixed').length}</strong><p>Easy to replace later</p></div>
+    <div class="card stat"><small>History rows</small><strong>${historyRecords.length}</strong><p>Imported from WhatsApp chat</p></div>
+  `;
+}
+
+function renderWeek() {
+  const start = weekStart(currentWeekOffset);
+  document.getElementById('weekLabel').textContent = `Week of ${formatRange(start)}`;
+  const week = buildWeekAssignments(currentWeekOffset);
+  document.getElementById('weekGrid').innerHTML = days.map((name, idx) => {
+    const date = dayDate(idx, currentWeekOffset);
+    const slots = week[idx] || [];
+    return `
+      <div class="day ${isToday(idx,currentWeekOffset)?'today':''} ${idx===3?'wed':''}">
+        <div class="dayhead">
+          <div><div class="dayname">${name.slice(0,3)}</div><div class="daynum">${date.getDate()}</div></div>
+          ${idx===3?'<span class="badge gold">2-slot day</span>':''}
+        </div>
+        ${slots.map(s=>{
+          const r=getReader(s.readerId) || {name:'Unassigned'};
+          return `<div class="slot ${s.type}"><div class="hz">Hizb ${s.hizb}</div><div class="reader">${r.name}</div><div class="sub">${s.type==='fixed'?'Fixed reader':'Floating reader'}</div></div>`;
+        }).join('') || '<div class="empty">No slot assigned</div>'}
+      </div>`;
+  }).join('');
+}
+
+function renderReaders() {
+  document.getElementById('readersTable').innerHTML = readers.map(r => `
+    <tr>
+      <td><strong>${r.name}</strong></td>
+      <td><span class="tag ${r.type}">${r.type}</span></td>
+      <td>${r.defaultHizb ? 'Hizb '+r.defaultHizb : 'Flexible'}</td>
+      <td>${r.note || ''}</td>
+    </tr>`).join('');
+}
+
+function renderHistory() {
+  document.getElementById('historyTable').innerHTML = historyRecords.map(r => `
+    <tr>
+      <td>${r.date}</td>
+      <td>${r.session}</td>
+      <td>${r.khatam}</td>
+      <td>${r.covered}</td>
+      <td>${r.reader_raw}</td>
+    </tr>`).join('');
+}
+
+function populateAssignModal() {
+  document.getElementById('assignReader').innerHTML = readers.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+  document.getElementById('assignDay').innerHTML = days.map((d,i)=>`<option value="${i}">${d}</option>`).join('');
+  document.getElementById('assignHizb').innerHTML = [1,2,3,4,5,6,7,8].map(h=>`<option value="${h}">Hizb ${h}</option>`).join('');
+}
+
+function bindNav() {
+  document.querySelectorAll('[data-view-btn]').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-view-btn]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const view = btn.getAttribute('data-view-btn');
+    document.getElementById('pageTitle').textContent = btn.textContent.trim();
+    ['schedule','readers','setup'].forEach(v => document.getElementById('view-'+v).classList.toggle('hidden', v!==view));
+  }));
+}
+
+function bindActions() {
+  document.getElementById('prevWeek').onclick = () => { currentWeekOffset--; renderStats(); renderWeek(); };
+  document.getElementById('nextWeek').onclick = () => { currentWeekOffset++; renderStats(); renderWeek(); };
+  document.getElementById('themeToggle').onclick = () => {
+    const root=document.documentElement; root.setAttribute('data-theme', root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+  };
+  document.getElementById('openAssign').onclick = () => document.getElementById('assignModalBg').classList.add('show');
+  document.getElementById('closeAssign').onclick = () => document.getElementById('assignModalBg').classList.remove('show');
+  document.getElementById('assignModalBg').addEventListener('click', e => { if(e.target.id==='assignModalBg') e.currentTarget.classList.remove('show'); });
+  document.getElementById('saveAssign').onclick = () => {
+    const key = weekKey(currentWeekOffset);
+    if(!customAssignments[key]) customAssignments[key] = {};
+    const day = document.getElementById('assignDay').value;
+    const slot = {
+      hizb: parseInt(document.getElementById('assignHizb').value,10),
+      readerId: parseInt(document.getElementById('assignReader').value,10),
+      type: document.getElementById('assignType').value
+    };
+    if(!customAssignments[key][day]) customAssignments[key][day] = [];
+    customAssignments[key][day].push(slot);
+    document.getElementById('assignModalBg').classList.remove('show');
+    renderStats(); renderWeek();
+  };
+}
+
+populateAssignModal();
+bindNav();
+bindActions();
+renderStats();
+renderWeek();
+renderReaders();
+renderHistory();
+</script>
+</body>
+</html>
